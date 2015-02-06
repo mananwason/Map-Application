@@ -19,12 +19,16 @@ public class MapsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
+        createMapView();
+        addMarker();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setUpMapIfNeeded();
+        //setUpMapIfNeeded();
+        createMapView();
+        addMarker();
     }
 
     /**
@@ -46,11 +50,12 @@ public class MapsActivity extends FragmentActivity {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapView))
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                createMapView();
             }
         }
     }
@@ -64,17 +69,28 @@ public class MapsActivity extends FragmentActivity {
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
-    private void createMapView(){
-        try{
-            if(null == mMap){
+
+    private void createMapView() {
+        try {
+            if (null == mMap) {
                 mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
-                if(null == mMap){
-                    Toast.makeText(getApplicationContext(),"Error Creating Map",Toast.LENGTH_SHORT).show();
+                if (null == mMap) {
+                    Toast.makeText(getApplicationContext(), "Error Creating Map", Toast.LENGTH_SHORT).show();
 
                 }
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Log.e("mapApp", e.toString());
+        }
+    }
+
+    private void addMarker() {
+        if (null != mMap) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(0, 0))
+                    .title("Initial Marker")
+                    .draggable(true)
+            );
         }
     }
 }
