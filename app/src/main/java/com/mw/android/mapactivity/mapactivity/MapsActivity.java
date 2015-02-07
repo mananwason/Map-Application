@@ -1,6 +1,7 @@
 package com.mw.android.mapactivity.mapactivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,16 +21,14 @@ import java.util.Map;
 public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
-    float zoomlevel;
+    Double[] polygon = {28.54752, 77.27201, 28.54865, 77.27401, 28.54829, 77.27422, 28.54825, 77.27447, 28.54363, 77.27268, 28.54350, 77.27257,
+            28.54346, 77.27234, 28.54416, 77.26998, 28.54505, 77.27001, 28.54498, 77.27244, 28.54531, 77.27292, 28.54680, 77.27291, 28.54346, 77.27235};
+
     Double[] points = {28.54435, 77.27272, 28.54704, 77.27359, 28.54754, 77.27390, 28.54804, 77.27332,
             28.54747, 77.27290, 28.54754, 77.27353, 28.54695, 77.27327, 28.54619, 77.27330,
             28.54395, 77.27248, 28.54420, 77.27071};
 
-    LatLng centre = new LatLng(28.54435, 77.27272);
-    LatLng girls_hostel = new LatLng(28.54704, 77.27359);
-    LatLng boys_hostel = new LatLng(28.54754, 77.27390);
-
-    private CameraPosition collegeCenter = new CameraPosition.Builder().target(centre).zoom(16).build();
+    private CameraPosition collegeCenter = new CameraPosition.Builder().target(new LatLng(28.54650, 77.27110)).zoom(16).build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MapsActivity extends FragmentActivity {
         //setUpMapIfNeeded();
         createMapView();
         addMarker();
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 
     @Override
@@ -68,8 +68,7 @@ public class MapsActivity extends FragmentActivity {
         } catch (NullPointerException e) {
             Log.e("mapApp", e.toString());
         }
-        zoomlevel = mMap.getCameraPosition().zoom;
-        Log.e("mapZoom", String.valueOf(zoomlevel));
+
 
     }
 
@@ -112,8 +111,8 @@ public class MapsActivity extends FragmentActivity {
                                                       public void onInfoWindowClick(Marker marker) {
 
                                                           if (marker.getTitle().equals("Student Centre")) {
-                                                              Toast.makeText(MapsActivity.this, marker.getTitle(), 1000).show();
-                                                              Intent student_ctr = new Intent(MapsActivity.this,Student_Centre.class);
+                                                              Toast.makeText(MapsActivity.this, marker.getTitle(), Toast.LENGTH_LONG).show();
+                                                              Intent student_ctr = new Intent(MapsActivity.this, Student_Centre.class);
                                                               startActivity(student_ctr);
 
                                                           }
@@ -122,6 +121,13 @@ public class MapsActivity extends FragmentActivity {
                                                   }
 
                 );
+                mMap.addPolygon(new PolygonOptions()
+                        .add(new LatLng(polygon[0], polygon[1]), new LatLng(polygon[2], polygon[3]), new LatLng(polygon[4], polygon[5]), new LatLng(polygon[6], polygon[7]),
+                                new LatLng(polygon[8], polygon[9]), new LatLng(polygon[10], polygon[11]), new LatLng(polygon[12], polygon[13]), new LatLng(polygon[14], polygon[15]),
+                                new LatLng(polygon[16], polygon[17]), new LatLng(polygon[18], polygon[19]), new LatLng(polygon[16], polygon[17]), new LatLng(polygon[18], polygon[19]),
+                                new LatLng(polygon[20], polygon[21]), new LatLng(polygon[22], polygon[23]))
+                        .fillColor(Color.TRANSPARENT));
+
 
             }
         }
